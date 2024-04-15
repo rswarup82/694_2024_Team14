@@ -1,0 +1,65 @@
+version: "3.8"
+services:
+  api:
+    container_name: searchapp
+    build: .
+    ports:
+      - "5000:5000"
+    image: searchapp
+    depends_on:
+      - mongodb
+      - postgres
+      - redis
+    links:
+      - mongodb
+      - postgres
+      - redis
+    volumes:
+     - './:/src'
+    environment:
+      - POSTGRES_DB_HOST = postgresdb_final_project_cluster
+      - POSTGRES_DB_PORT = 5432
+      - POSTGRES_DB_USER = postgres
+      - POSTGRES_DB_PASSWORD = postgres
+      - POSTGRES_DB_NAME = tweets_db
+      - MONGO_DB_HOST = mongodb_final_project_cluster
+      - MONGO_DB_PORT = 27017
+      - MONGO_DB_USER = root
+      - MONGO_DB_PASSWORD = pass
+      - MONGO_DB_NAME = tweets_db
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    hostname: mongodb_final_project_cluster
+    environment:
+      - MONGO_INITDB_DATABASE=tweets
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    ports:
+      - "27017:27017"
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    hostname: postgresdb_final_project_cluster
+    restart: always
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  redis:
+    container_name: redis
+    image: redislabs/redismod
+    ports:
+      - "6379:6379"
+    restart: always
+
+volumes:
+  db:
+    driver: local

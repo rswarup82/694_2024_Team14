@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+marshmallow = "*"
+pymongo = "*"
+bson = "*"
+psycopg2-binary = "*"
+redis = "*"
+flask-caching = "*"
+requests = "*"
+flask-script = "*"
+sqlalchemy = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
